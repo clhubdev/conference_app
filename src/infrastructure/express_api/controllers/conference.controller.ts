@@ -1,8 +1,8 @@
-import { CurrentDateGenerator } from "../../../src/adapters/current-date-generator";
-import { InMemoryConferenceRepository } from "../../../src/adapters/in-memory-conference-repository";
-import { RandomIDGenerator } from "../../../src/adapters/random-id-generator";
-import { User } from "../../../src/entities/user.entity";
-import { OrganizeConference } from "../../../src/usecases/organize-conference";
+import { CurrentDateGenerator } from "../../../adapters/current-date-generator";
+import { InMemoryConferenceRepository } from "../../../adapters/in-memory-conference-repository";
+import { RandomIDGenerator } from "../../../adapters/random-id-generator";
+import { User } from "../../../entities/user.entity";
+import { OrganizeConference } from "../../../usecases/organize-conference";
 import { Request, Response, NextFunction } from "express";
 import { CreateConferenceInputs } from "../dto/conference.dto";
 import { ValidationRequest } from "../utils/validate-request";
@@ -23,7 +23,7 @@ export const organizeConference = async (req: Request, res: Response, next: Next
         const {errors, input} = await ValidationRequest(CreateConferenceInputs, body)
 
         if(errors) {
-            return res.status(400).json({errors})
+            return res.jsonError(errors, 400)
         } 
         
         const result = await usecase.execute({
@@ -34,7 +34,7 @@ export const organizeConference = async (req: Request, res: Response, next: Next
             seats: input.seats,
         })
 
-        return res.status(201).json(result)
+        return res.jsonSuccess({id: result.id}, 201)
     } catch (error) {
         next(error);
     }

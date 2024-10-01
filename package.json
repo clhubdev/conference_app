@@ -2,10 +2,11 @@
   "name": "conference_app",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "server.ts",
   "scripts": {
     "test": "jest",
-    "test:e2e": "jest --config jest.config.int.ts"
+    "test:e2e": "jest --config jest.config.int.ts",
+    "start": "nodemon src/infrastructure/express_api/server.ts"
   },
   "keywords": [],
   "author": "",

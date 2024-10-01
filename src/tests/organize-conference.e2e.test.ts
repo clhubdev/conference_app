@@ -1,5 +1,5 @@
 import { addDays, addHours } from 'date-fns'
-import app from '../../infrastructure/express_api/app'
+import app from '../infrastructure/express_api/app'
 import request from 'supertest'
 describe('Feature: OrganizeConference', () => {
     it('should organize a conference', async () => {
@@ -13,6 +13,6 @@ describe('Feature: OrganizeConference', () => {
         })
 
         expect(result.status).toBe(201)
-        expect(result.body).toEqual({id: expect.any(String)})
+        expect(result.body.data).toEqual({id: expect.any(String)})
     })
 })
