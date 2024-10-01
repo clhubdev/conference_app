@@ -27,7 +27,7 @@ export const organizeConference = async (req: Request, res: Response, next: Next
         } 
         
         const result = await usecase.execute({
-            user: new User({id: 'john-doe'}),
+            user: req.user,
             title: input.title,
             startDate: new Date(input.startDate),
             endDate: new Date(input.endDate),

@@ -2,7 +2,6 @@ import { IMemoryConferenceRepository } from "../ports/conference-repository.inte
 import { Conference } from "../entities/conference.entity"
 import { IIDGenerator } from "../ports/id-generator.interface"
 import { IDateGenerator } from "../ports/date-generator.interface"
-import { differenceInDays } from "date-fns"
 import { User } from "../entities/user.entity"
 
 export class OrganizeConference {
