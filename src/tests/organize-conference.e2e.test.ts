@@ -1,9 +1,12 @@
 import { addDays, addHours } from 'date-fns'
-import app from '../infrastructure/express_api/app'
 import request from 'supertest'
-import { InMemoryUserRepository } from '../user/adapters/in-memory-user-repository'
 import { User } from '../user/entities/user.entity'
-import { BasicAuthenticator } from '../user/services/authenticator'
+import container from '../infrastructure/config/dependency-injection'
+import { IConferenceRepository } from '../conference/ports/conference-repository.interface'
+import { TestApp } from './utils/test-app'
+import { Application } from 'express'
+import { e2eUsers } from './seeds/user-seeds'
+
 describe('Feature: OrganizeConference', () => {
     const johndoe = new User({
         id: "john-doe",
@@ -11,29 +14,44 @@ describe('Feature: OrganizeConference', () => {
         password: "qwerty"
     })
 
-    let repository: InMemoryUserRepository
+    let testApp: TestApp
+    let app: Application
 
-    beforeEach(async() => {
-        repository = new InMemoryUserRepository()
-        await repository.create(johndoe)
+    beforeEach(async () => {
+        testApp = new TestApp()
+        await testApp.setup()
+        await testApp.loadAllFixtures([e2eUsers.johnDoe])
+        app = testApp.expressApp
     })
 
     it('should organize a conference', async () => {
-        const token = Buffer.from(`${johndoe.props.emailAddress}:${johndoe.props.password}`).toString('base64')
-
-        jest.spyOn(BasicAuthenticator.prototype, "authenticate").mockResolvedValue(johndoe)
+        const startDate = addDays(new Date(), 4)
+        const endDate = addDays(addHours(new Date(), 2), 4)
 
         const result = await request(app)
-        .post('/conference')
-        .set('Authorization', `Basic ${token}`)
-        .send({
-            title: 'My first conference',
-            seats: 100,
-            startDate: addDays(new Date(), 4).toISOString(),
-            endDate: addDays(addHours(new Date(), 2), 4).toISOString(),
-        })
+            .post('/conference')
+            .set('Authorization', e2eUsers.johnDoe.createAuthorizationToken())
+            .send({
+                title: 'My first conference',
+                seats: 100,
+                startDate: startDate.toISOString(),
+                endDate: endDate.toISOString(),
+            })
 
         expect(result.status).toBe(201)
-        expect(result.body.data).toEqual({id: expect.any(String)})
+        expect(result.body.data).toEqual({ id: expect.any(String) })
+
+        const conferenceRepository = container.resolve('conferenceRepository') as IConferenceRepository
+        const fetchedConference = await conferenceRepository.findById(result.body.data.id)
+
+        expect(fetchedConference).toBeDefined
+        expect(fetchedConference?.props).toEqual({
+            id: result.body.data.id,
+            organizerId: johndoe.props.id,
+            title: 'My first conference',
+            seats: 100,
+            startDate,
+            endDate,
+        })
     })
 })
