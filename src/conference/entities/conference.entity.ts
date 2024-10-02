@@ -10,7 +10,14 @@ type ConferenceProps = {
 }
 
 export class Conference {
-    constructor(public props: ConferenceProps) {}
+    public initialState: ConferenceProps
+    public props: ConferenceProps
+
+    constructor(data: ConferenceProps) {
+        this.initialState = {... data}
+        this.props = {... data}
+        Object.freeze(this.initialState)
+    }
 
     isTooClose(now: Date): boolean {
         return differenceInDays(this.props.startDate, now) < 3
@@ -30,5 +37,9 @@ export class Conference {
 
     update(data: Partial<ConferenceProps>) {
         this.props = {... this.props, ... data}
+    }
+
+    commit() : void {
+        this.initialState = this.props
     }
 }

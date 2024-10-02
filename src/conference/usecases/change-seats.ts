@@ -11,16 +11,18 @@ type ResponseChangeSeats = void
 
 export class ChangeSeats {
 
-    constructor(private readonly repository: IConferenceRepository){
+    constructor(private readonly repository: IConferenceRepository){}
 
-    }
     async execute({user, conferenceId, seats}: RequestChangeSeats): Promise<ResponseChangeSeats> {
-        console.log(conferenceId)
         const conference = await this.repository.findById(conferenceId)
 
         if(!conference) throw new Error('Conference not found')
         if(user.props.id !== conference.props.organizerId) throw new Error('You are not allowed to update this conference')
 
         conference.update({seats})
+
+        if(conference.hasNotEnoughSeats() || conference.hasTooManySeats()) throw new Error('The conference must have a maximum of 1000 seats and minimum of 20 seats')
+
+        await this.repository.update(conference)
     }
 }
