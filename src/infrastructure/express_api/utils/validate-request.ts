@@ -11,7 +11,6 @@ const validationError = async(input: any): Promise<ValidationError[] | false > =
     return false
 } 
 
-// TODO : à voir plaintoclass
 export const ValidationRequest = async <T>(type: ClassConstructor<T>, body: any) : Promise<{errors: boolean|string, input: T}> => {
     const input = plainToClass(type, body)
     const errors = await validationError(input)

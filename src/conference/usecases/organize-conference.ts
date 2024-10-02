@@ -3,8 +3,21 @@ import { IIDGenerator } from "../ports/id-generator.interface"
 import { User } from "../../user/entities/user.entity"
 import { IDateGenerator } from "../ports/date-generator.interface"
 import { Conference } from "../entities/conference.entity"
+import { Executable } from "../../core/executable.interface"
 
-export class OrganizeConference {
+type OrganizeRequest = {
+    user: User,
+    title: string,
+    startDate: Date,
+    endDate: Date,
+    seats: number
+}
+
+type OrganizeResponse = {
+    id: string
+}
+
+export class OrganizeConference implements Executable<OrganizeRequest, OrganizeResponse> {
 
     constructor(
         private readonly repository: InMemoryConferenceRepository,
@@ -12,17 +25,17 @@ export class OrganizeConference {
         private readonly dateGenerator: IDateGenerator
     ) { }
 
-    async execute(data: { user: User, title: string, startDate: Date, endDate: Date, seats: number }) {
+    async execute({ user, title, startDate, endDate, seats }) {
 
         const id = this.idGenerator.generate()
 
         const newConference = new Conference({
             id,
-            organizerId: data.user.props.id,
-            title: data.title,
-            startDate: data.startDate,
-            endDate: data.endDate,
-            seats: data.seats
+            organizerId: user.props.id,
+            title,
+            startDate,
+            endDate,
+            seats
         })
 
         if(newConference.isTooClose(this.dateGenerator.now())) {
