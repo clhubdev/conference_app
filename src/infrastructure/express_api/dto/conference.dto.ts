@@ -1,4 +1,4 @@
-import { IsDate, IsDateString, IsNotEmpty, IsNumber, IsString } from "class-validator"
+import { IsDate, IsDateString, IsNotEmpty, isNumber, IsNumber, IsString } from "class-validator"
 
 export class CreateConferenceInputs {
     @IsString()
@@ -16,4 +16,10 @@ export class CreateConferenceInputs {
     @IsDateString()
     @IsNotEmpty()
     endDate: Date
+}
+
+export class ChangeSeatsInputs {
+    @IsNumber()
+    @IsNotEmpty()
+    seats: number
 }

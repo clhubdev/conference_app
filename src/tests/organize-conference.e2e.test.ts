@@ -47,7 +47,7 @@ describe('Feature: OrganizeConference', () => {
         expect(fetchedConference).toBeDefined
         expect(fetchedConference?.props).toEqual({
             id: result.body.data.id,
-            organizerId: johndoe.props.id,
+            organizerId: e2eUsers.johnDoe.entity.props.id,
             title: 'My first conference',
             seats: 100,
             startDate,

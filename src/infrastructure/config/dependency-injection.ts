@@ -27,7 +27,7 @@ const userRepository = container.resolve('userRepository') as IUserRepository
 container.register({
     organizeConferenceUseCase: asValue(new OrganizeConference(conferenceRepository, idGenerator, dateGenerator)),
     authenticator: asValue(new BasicAuthenticator(userRepository)),
-    ChangeSeats: asValue(new ChangeSeats(conferenceRepository))
+    changeSeats: asValue(new ChangeSeats(conferenceRepository))
 })
 
 export default container
