@@ -1,11 +1,11 @@
-import { CurrentDateGenerator } from "../../../adapters/current-date-generator";
-import { InMemoryConferenceRepository } from "../../../adapters/in-memory-conference-repository";
-import { RandomIDGenerator } from "../../../adapters/random-id-generator";
-import { User } from "../../../entities/user.entity";
-import { OrganizeConference } from "../../../usecases/organize-conference";
+import { User } from "../../../user/entities/user.entity";
 import { Request, Response, NextFunction } from "express";
 import { CreateConferenceInputs } from "../dto/conference.dto";
 import { ValidationRequest } from "../utils/validate-request";
+import { CurrentDateGenerator } from "../../../core/adapters/current-date-generator";
+import { InMemoryConferenceRepository } from "../../../conference/adapters/in-memory-conference-repository";
+import { RandomIDGenerator } from "../../../core/adapters/random-id-generator";
+import { OrganizeConference } from "../../../conference/usecases/organize-conference";
 
 const IdGenerator = new RandomIDGenerator()
 const currentDateGenerator = new CurrentDateGenerator()

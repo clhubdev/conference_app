@@ -1,5 +1,6 @@
 import { Conference } from "../entities/conference.entity"
 
-export interface IMemoryConferenceRepository {
+export interface IConferenceRepository {
     create(conference: Conference) : Promise<void>
+    findById(id: string): Promise<Conference | null>
 }

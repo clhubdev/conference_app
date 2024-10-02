@@ -1,9 +1,9 @@
 import { addDays, addHours } from 'date-fns'
 import app from '../infrastructure/express_api/app'
 import request from 'supertest'
-import { InMemoryUserRepository } from '../adapters/in-memory-user-repository'
-import { User } from '../entities/user.entity'
-import { BasicAuthenticator } from '../services/authenticator'
+import { InMemoryUserRepository } from '../user/adapters/in-memory-user-repository'
+import { User } from '../user/entities/user.entity'
+import { BasicAuthenticator } from '../user/services/authenticator'
 describe('Feature: OrganizeConference', () => {
     const johndoe = new User({
         id: "john-doe",

@@ -1,13 +1,13 @@
-import { IMemoryConferenceRepository } from "../ports/conference-repository.interface"
-import { Conference } from "../entities/conference.entity"
+import { InMemoryConferenceRepository } from "../adapters/in-memory-conference-repository"
 import { IIDGenerator } from "../ports/id-generator.interface"
+import { User } from "../../user/entities/user.entity"
 import { IDateGenerator } from "../ports/date-generator.interface"
-import { User } from "../entities/user.entity"
+import { Conference } from "../entities/conference.entity"
 
 export class OrganizeConference {
 
     constructor(
-        private readonly repository: IMemoryConferenceRepository,
+        private readonly repository: InMemoryConferenceRepository,
         private readonly idGenerator: IIDGenerator, //FixedIdGenerator => id-1
         private readonly dateGenerator: IDateGenerator
     ) { }

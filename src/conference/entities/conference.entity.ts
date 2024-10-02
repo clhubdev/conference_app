@@ -27,4 +27,8 @@ export class Conference {
     hasNotEnoughSeats(): boolean {
         return this.props.seats < 20
     }
+
+    update(data: Partial<ConferenceProps>) {
+        this.props = {... this.props, ... data}
+    }
 }

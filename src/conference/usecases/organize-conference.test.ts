@@ -1,9 +1,9 @@
 import { OrganizeConference } from "./organize-conference"
 import { InMemoryConferenceRepository } from "../adapters/in-memory-conference-repository"
-import { FixedIDGenerator } from "../adapters/fixed-id-generator"
+import { FixedIDGenerator } from "../../core/adapters/fixed-id-generator"
 import { Conference } from "../entities/conference.entity"
-import { fixedDateGenerator } from "../adapters/fixed-date-generator"
-import { User } from "../entities/user.entity"
+import { fixedDateGenerator } from "../../core/adapters/fixed-date-generator"
+import { User } from "../../user/entities/user.entity"
 
 describe("Feature: organize conference", () => {
     function expectConferenceToEqual(conference: Conference){
@@ -17,7 +17,11 @@ describe("Feature: organize conference", () => {
         })
     }
 
-    const johnDoe = new User({id: "john-doe"})
+    const johnDoe = new User({
+        id: "john-doe",
+        emailAddress: "johndoe@gmail.com",
+        password: "qwerty"
+    })
 
     let repository: InMemoryConferenceRepository
     let idGenerator: FixedIDGenerator
