@@ -8,7 +8,7 @@
     [X] Change the number of seats
     [X] The conference must exist
     [X] The user must be the organizer
-    [] The seats must be between 20 and 1000
+    [X] The seats must be between 20 and 1000
 [] Usecase: Change the dates of a conference
     [] Change the dates
     [] The conference must exist

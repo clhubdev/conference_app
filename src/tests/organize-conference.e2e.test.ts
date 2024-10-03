@@ -24,6 +24,10 @@ describe('Feature: OrganizeConference', () => {
         app = testApp.expressApp
     })
 
+    afterAll(async () => {
+        await testApp.tearDown()
+    })
+
     it('should organize a conference', async () => {
         const startDate = addDays(new Date(), 4)
         const endDate = addDays(addHours(new Date(), 2), 4)
