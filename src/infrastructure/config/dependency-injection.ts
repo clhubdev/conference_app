@@ -9,6 +9,8 @@ import { IUserRepository } from "../../user/ports/user-repository.interface"
 import { IDateGenerator } from "../../conference/ports/date-generator.interface"
 import { IIDGenerator } from "../../conference/ports/id-generator.interface"
 import { ChangeSeats } from "../../conference/usecases/change-seats"
+import { MongoUserRepository } from "../../user/adapters/mongo/mongo-user-repository"
+import { MongoUser } from "../../user/adapters/mongo/mongo-user"
 
 const container = createContainer()
 
@@ -16,7 +18,7 @@ container.register({
     conferenceRepository: asClass(InMemoryConferenceRepository).singleton(),
     idGenerator: asClass(RandomIDGenerator).singleton(),
     dateGenerator: asClass(CurrentDateGenerator).singleton(),
-    userRepository: asClass(InMemoryUserRepository).singleton(),
+    userRepository: asValue(new MongoUserRepository(MongoUser.UserModel)),
 })
 
 const conferenceRepository = container.resolve("conferenceRepository")
@@ -27,7 +29,7 @@ const userRepository = container.resolve('userRepository') as IUserRepository
 container.register({
     organizeConferenceUseCase: asValue(new OrganizeConference(conferenceRepository, idGenerator, dateGenerator)),
     authenticator: asValue(new BasicAuthenticator(userRepository)),
-    changeSeats: asValue(new ChangeSeats(conferenceRepository))
+    changeSeats: asValue(new ChangeSeats(conferenceRepository)),
 })
 
 export default container

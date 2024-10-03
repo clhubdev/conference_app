@@ -5,7 +5,8 @@
   "main": "server.ts",
   "scripts": {
     "test": "jest",
-    "test:e2e": "jest --config jest.config.int.ts",
+    "test:e2e": "jest --config jest.config.e2e.ts",
+    "test:int": "jest --config jest.config.int.ts",
     "start": "nodemon src/infrastructure/express_api/server.ts"
   },
   "keywords": [],
