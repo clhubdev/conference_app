@@ -31,7 +31,7 @@ export class ChangeSeats implements Executable<RequestChangeSeats, ResponseChang
 
         if(conference.hasNotEnoughSeats() || conference.hasTooManySeats()) throw new Error('The conference must have a maximum of 1000 seats and minimum of 20 seats')
 
-        const bookings = await this.bookingRepository.findByConferenceId(conference.props.id)
+        const bookings = await this.bookingRepository.findById(conference.props.id)
         if(conference.hasNotEnoughSeats(bookings.length)) throw new Error('The conference must have a minimum seat equal to the number of bookings')
 
         await this.repository.update(conference)
