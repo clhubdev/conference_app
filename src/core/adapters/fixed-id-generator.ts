@@ -1,4 +1,4 @@
-import { IIDGenerator } from "../../conference/ports/id-generator.interface";
+import { IIDGenerator } from "../ports/id-generator.interface";
 
 export class FixedIDGenerator implements IIDGenerator {
     generate(): string {

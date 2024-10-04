@@ -23,3 +23,13 @@ export class ChangeSeatsInputs {
     @IsNotEmpty()
     seats: number
 }
+
+export class ChangeDatesInputs {
+    @IsDateString()
+    @IsNotEmpty()
+    startDate: Date
+
+    @IsDateString()
+    @IsNotEmpty()
+    endDate: Date
+}

@@ -54,8 +54,8 @@ describe('Feature: OrganizeConference', () => {
             organizerId: e2eUsers.johnDoe.entity.props.id,
             title: 'My first conference',
             seats: 100,
-            startDate,
-            endDate,
+            startDate: startDate.toISOString(),
+            endDate: endDate.toISOString(),
         })
     })
 })

@@ -5,7 +5,7 @@ import { IUserRepository } from "../../user/ports/user-repository.interface";
 import { Conference } from "../entities/conference.entity";
 import { IBookingRepository } from "../ports/booking-repository.interface";
 import { IConferenceRepository } from "../ports/conference-repository.interface";
-import { IDateGenerator } from "../ports/date-generator.interface";
+import { IDateGenerator } from "../../core/ports/date-generator.interface";
 
 type RequestChangeDates = {
     user: User,

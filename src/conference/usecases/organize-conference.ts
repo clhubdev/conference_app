@@ -1,7 +1,7 @@
 import { InMemoryConferenceRepository } from "../adapters/in-memory-conference-repository"
-import { IIDGenerator } from "../ports/id-generator.interface"
+import { IIDGenerator } from "../../core/ports/id-generator.interface"
 import { User } from "../../user/entities/user.entity"
-import { IDateGenerator } from "../ports/date-generator.interface"
+import { IDateGenerator } from "../../core/ports/date-generator.interface"
 import { Conference } from "../entities/conference.entity"
 import { Executable } from "../../core/executable.interface"
 
