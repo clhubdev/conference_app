@@ -40,11 +40,15 @@ export class MakeBooking implements Executable<MakeBookingRequest, MakeBookingRe
 
         //Vérifier si l'utilisateur est déjà enregistré
         const conference = await this.conferenceRepository.findById(conferenceId)
+        if (!conference) throw new Error('Conference not found');
+
         const user = await this.userRepository.findById(userId)
-        if(await this.isAlreadyRegisted(conference!, user!)) throw new Error('The user is already registered for this conference')
+        if (!user) throw new Error('User not found');
+
+        if(await this.isAlreadyRegisted(conference, user)) throw new Error('The user is already registered for this conference')
 
         //Vérifier si la conférence est sold out
-        if(await this.isSoldOut(conference!)) throw new Error('This conference is sold out')
+        if(await this.isSoldOut(conference)) throw new Error('This conference is sold out')
 
         await this.repository.create(newBooking)
         await this.sendEmailToParticipantAndOrganize(newBooking)

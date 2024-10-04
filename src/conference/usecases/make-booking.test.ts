@@ -37,6 +37,7 @@ describe('Feature: Book a conference place', () => {
         useCase = new MakeBooking(idGenerator, repository, userRepository, conferenceRepository, mailer)
 
         await userRepository.create(testUsers.johnDoe)
+        await userRepository.create(testUsers.alice)
         await conferenceRepository.create(testConference.conference1)
     })
 
