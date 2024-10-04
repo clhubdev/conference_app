@@ -39,7 +39,7 @@ const mailer = container.resolve('mailer') as IMailer
 container.register({
     organizeConferenceUseCase: asValue(new OrganizeConference(conferenceRepository, idGenerator, dateGenerator)),
     authenticator: asValue(new BasicAuthenticator(userRepository)),
-    changeSeats: asValue(new ChangeSeats(conferenceRepository)),
+    changeSeats: asValue(new ChangeSeats(conferenceRepository, bookingRepository)),
     changeDates: asValue(new ChangeDates(conferenceRepository, dateGenerator, bookingRepository, mailer, userRepository))
 })
 

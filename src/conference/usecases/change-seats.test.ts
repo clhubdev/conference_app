@@ -2,6 +2,8 @@ import { ChangeSeats } from "./change-seats"
 import { InMemoryConferenceRepository } from "../adapters/in-memory-conference-repository"
 import { testConference } from "../tests/conference-seeds"
 import { testUsers } from "../../user/tests/user-seeds"
+import { InMemoryBookingRepository } from "../adapters/in-memory-booking-repository"
+import { testBooking } from "../tests/booking-seeds"
 
 describe('Feature: Changing the number of seats', () => {
     async function expectSeatUnchanges() {
@@ -10,12 +12,21 @@ describe('Feature: Changing the number of seats', () => {
     }
 
     let repository: InMemoryConferenceRepository
+    let bookingRepository: InMemoryBookingRepository
     let useCase: ChangeSeats
 
     beforeEach(async() => {
         repository = new InMemoryConferenceRepository()
+        bookingRepository = new InMemoryBookingRepository()
+
         await repository.create(testConference.conference1)
-        useCase = new ChangeSeats(repository)
+
+        // Créer 50 booking
+        for(let i = 0; i < 50; i++) {
+            await bookingRepository.create(testBooking.bobBooking)
+        }
+
+        useCase = new ChangeSeats(repository, bookingRepository)
     })
 
     describe('Scenario: Happy path', () => {
@@ -81,6 +92,18 @@ describe('Feature: Changing the number of seats', () => {
             await expectSeatUnchanges()
         })
 
+    })
+
+    describe('Scenario: Number of seats < number of bookings', () => {
+        it('should fail', async () => {
+            await expect(useCase.execute({
+                user: testUsers.johnDoe,
+                conferenceId: testConference.conference1.props.id,
+                seats: 25 // hypothèse : 50 bookings.
+            })).rejects.toThrow('The conference must have a minimum seat equal to the number of bookings')
+
+            await expectSeatUnchanges()
+        })
     })
 
 })

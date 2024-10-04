@@ -24,7 +24,8 @@ export class Conference extends Entity<ConferenceProps> {
         return this.props.seats > 1000
     }
 
-    hasNotEnoughSeats(): boolean {
-        return this.props.seats < 20
+    hasNotEnoughSeats(minimalSeats: number = 20): boolean {
+        minimalSeats = minimalSeats <= 20 ? 20 : minimalSeats
+        return this.props.seats < minimalSeats
     }
 }
