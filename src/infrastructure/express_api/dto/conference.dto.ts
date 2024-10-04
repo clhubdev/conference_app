@@ -18,6 +18,16 @@ export class CreateConferenceInputs {
     endDate: Date
 }
 
+export class CreateBookingInputs {
+    @IsString()
+    @IsNotEmpty()
+    userId: string
+
+    @IsString()
+    @IsNotEmpty()
+    conferenceId: string
+}
+
 export class ChangeSeatsInputs {
     @IsNumber()
     @IsNotEmpty()

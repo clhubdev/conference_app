@@ -42,8 +42,8 @@ describe('Feature: Book a conference place', () => {
 
     describe('Scenario: Happy path', () => {
         const payload = {
-            user: testUsers.johnDoe,
-            conference: testConference.conference1,
+            userId: testUsers.johnDoe.props.id,
+            conferenceId: testConference.conference1.props.id,
         }
         it('should return the ID', async() => {
             const result = await useCase.execute(payload)
@@ -83,8 +83,8 @@ describe('Feature: Book a conference place', () => {
 
     describe('Scenario: The user has already reserved a place at this conference ', () => {
         const payload = {
-            user: testUsers.alice,
-            conference: testConference.conference1,
+            userId: testUsers.alice.props.id,
+            conferenceId: testConference.conference1.props.id,
         }
 
         it('should throw an error', async () => {
@@ -95,8 +95,8 @@ describe('Feature: Book a conference place', () => {
 
      describe('Scenario: The conference is sold out ', () => {
         const payload = {
-            user: testUsers.alice,
-            conference: testConference.conference1,
+            userId: testUsers.alice.props.id,
+            conferenceId: testConference.conference1.props.id,
         }
 
         it('should throw an error', async () => {

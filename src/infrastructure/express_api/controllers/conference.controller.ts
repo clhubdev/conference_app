@@ -1,11 +1,12 @@
 import { Request, Response, NextFunction } from "express";
-import { ChangeDatesInputs, ChangeSeatsInputs, CreateConferenceInputs } from "../dto/conference.dto";
+import { ChangeDatesInputs, ChangeSeatsInputs, CreateBookingInputs, CreateConferenceInputs } from "../dto/conference.dto";
 import { ValidationRequest } from "../utils/validate-request";
 import { AwilixContainer } from "awilix";
 import { ChangeSeats } from "../../../conference/usecases/change-seats";
 import { ChangeDates } from "../../../conference/usecases/change-dates";
 import { User } from "../../../user/entities/user.entity";
 import { OrganizeConference } from "../../../conference/usecases/organize-conference";
+import { MakeBooking } from "../../../conference/usecases/make-booking";
 
 
 export const organizeConference = (container: AwilixContainer) => {
@@ -29,6 +30,31 @@ export const organizeConference = (container: AwilixContainer) => {
 
             return res.jsonSuccess({ id: result.id }, 201)
         } catch (error) {
+            next(error);
+        }
+    }
+}
+
+export const bookConference = (container: AwilixContainer) => {
+    return async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            const body = req.body
+
+            const { errors, input } = await ValidationRequest(CreateBookingInputs, body)
+
+            if (errors) {
+                console.log(errors)
+                return res.jsonError(errors, 400)
+            }
+
+            const result = await (container.resolve("makeBookingUseCase") as MakeBooking).execute({
+                userId: input.userId,
+                conferenceId: input.conferenceId
+            })
+
+            return res.jsonSuccess({ id: result.id }, 201)
+        } catch (error) {
+            console.log(error)
             next(error);
         }
     }

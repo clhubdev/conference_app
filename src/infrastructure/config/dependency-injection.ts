@@ -15,6 +15,7 @@ import { InMemoryBookingRepository } from "../../conference/adapters/in-memory-b
 import { IBookingRepository } from "../../conference/ports/booking-repository.interface"
 import { InMemoryMailer } from "../../core/adapters/in-memory-mailer"
 import { IMailer } from "../../core/ports/mailer.interface"
+import { MakeBooking } from "../../conference/usecases/make-booking"
 
 const container = createContainer()
 
@@ -36,6 +37,7 @@ const mailer = container.resolve('mailer') as IMailer
 
 container.register({
     organizeConferenceUseCase: asValue(new OrganizeConference(conferenceRepository, idGenerator, dateGenerator)),
+    makeBookingUseCase: asValue(new MakeBooking(idGenerator, bookingRepository, userRepository, conferenceRepository, mailer )),
     authenticator: asValue(new BasicAuthenticator(userRepository)),
     changeSeats: asValue(new ChangeSeats(conferenceRepository, bookingRepository)),
     changeDates: asValue(new ChangeDates(conferenceRepository, dateGenerator, bookingRepository, mailer, userRepository))

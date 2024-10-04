@@ -3,14 +3,17 @@ import { IIDGenerator } from "../../core/ports/id-generator.interface"
 import { IMailer } from "../../core/ports/mailer.interface"
 import { InMemoryUserRepository } from "../../user/adapters/in-memory-user-repository"
 import { User } from "../../user/entities/user.entity"
+import { IUserRepository } from "../../user/ports/user-repository.interface"
 import { InMemoryBookingRepository } from "../adapters/in-memory-booking-repository"
 import { InMemoryConferenceRepository } from "../adapters/in-memory-conference-repository"
 import { Booking } from "../entities/booking.entity"
 import { Conference } from "../entities/conference.entity"
+import { IBookingRepository } from "../ports/booking-repository.interface"
+import { IConferenceRepository } from "../ports/conference-repository.interface"
 
 type MakeBookingRequest = {
-    user: User,
-    conference: Conference
+    userId: string,
+    conferenceId: string
 }
 
 type MakeBookingResponse = {
@@ -20,26 +23,28 @@ type MakeBookingResponse = {
 export class MakeBooking implements Executable<MakeBookingRequest, MakeBookingResponse> {
     constructor(
         private readonly idGenerator: IIDGenerator,
-        private readonly repository: InMemoryBookingRepository,
-        private readonly userRepository: InMemoryUserRepository,
-        private readonly conferenceRepository: InMemoryConferenceRepository,
+        private readonly repository: IBookingRepository,
+        private readonly userRepository: IUserRepository,
+        private readonly conferenceRepository: IConferenceRepository,
         private readonly mailer: IMailer,
     ) { }
 
-    async execute({ user, conference }): Promise<MakeBookingResponse> {
+    async execute({ userId, conferenceId }): Promise<MakeBookingResponse> {
         const id = this.idGenerator.generate()
 
         const newBooking = new Booking({
             id,
-            userId: user.props.id,
-            conferenceId: conference.props.id,
+            userId: userId,
+            conferenceId: conferenceId,
         })
 
         //Vérifier si l'utilisateur est déjà enregistré
-        if(await this.isAlreadyRegisted(conference, user)) throw new Error('The user is already registered for this conference')
+        const conference = await this.conferenceRepository.findById(conferenceId)
+        const user = await this.userRepository.findById(userId)
+        if(await this.isAlreadyRegisted(conference!, user!)) throw new Error('The user is already registered for this conference')
 
         //Vérifier si la conférence est sold out
-        if(await this.isSoldOut(conference)) throw new Error('This conference is sold out')
+        if(await this.isSoldOut(conference!)) throw new Error('This conference is sold out')
 
         await this.repository.create(newBooking)
         await this.sendEmailToParticipantAndOrganize(newBooking)
