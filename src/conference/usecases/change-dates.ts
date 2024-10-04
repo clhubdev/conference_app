@@ -6,6 +6,8 @@ import { Conference } from "../entities/conference.entity";
 import { IBookingRepository } from "../ports/booking-repository.interface";
 import { IConferenceRepository } from "../ports/conference-repository.interface";
 import { IDateGenerator } from "../../core/ports/date-generator.interface";
+import { ConferenceNotFoundException } from "../../exceptions/conference-not-found";
+import { ConferenceUpdateForbiddenException } from "../../exceptions/conference-update-forbidden";
 
 type RequestChangeDates = {
     user: User,
@@ -28,8 +30,8 @@ export class ChangeDates implements Executable<RequestChangeDates, ResponseChang
     async execute({user, conferenceId, startDate, endDate}: RequestChangeDates): Promise<void> {
         const conference = await this.repository.findById(conferenceId)
 
-        if(!conference) throw new Error('Conference not found')
-        if(user.props.id !== conference.props.organizerId) throw new Error('You are not allowed to update this conference')
+        if(!conference) throw new ConferenceNotFoundException()
+        if(user.props.id !== conference.props.organizerId) throw new ConferenceUpdateForbiddenException()
 
         conference.update({
             startDate,

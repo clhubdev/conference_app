@@ -35,9 +35,9 @@ describe('Feature: Change the date of conference', () => {
     describe('Scenario: Happy path', () => {
         it('should change the date', async () => {
 
-            const startDate = addDays(new Date(), 4)
-            const endDate = addDays(addHours(new Date(), 2), 4)
-            const id = 'id-1'
+            const startDate = addDays(new Date(), 8)
+            const endDate = addDays(addHours(new Date(), 2), 8)
+            const id = e2eConference.conference1.entity.props.id
 
             const result = await request(app)
                 .patch(`/conference/dates/${id}`)
@@ -56,9 +56,6 @@ describe('Feature: Change the date of conference', () => {
             expect(fetchedConference?.props.startDate).toEqual(startDate.toISOString())
             expect(fetchedConference?.props.endDate).toEqual(endDate.toISOString())
         })
-
-        
-
     })
 
     describe('Scenario: User is not authorized', () => {
@@ -72,7 +69,6 @@ describe('Feature: Change the date of conference', () => {
                 .send({startDate, endDate})
             
             expect(result.status).toBe(403)
-
         })
     })
 })

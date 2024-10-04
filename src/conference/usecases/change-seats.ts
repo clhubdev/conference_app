@@ -1,4 +1,6 @@
 import { Executable } from "../../core/executable.interface"
+import { ConferenceNotFoundException } from "../../exceptions/conference-not-found"
+import { ConferenceUpdateForbiddenException } from "../../exceptions/conference-update-forbidden"
 import { User } from "../../user/entities/user.entity"
 import { IConferenceRepository } from "../ports/conference-repository.interface"
 
@@ -17,8 +19,8 @@ export class ChangeSeats implements Executable<RequestChangeSeats, ResponseChang
     async execute({user, conferenceId, seats}) {
         const conference = await this.repository.findById(conferenceId)
 
-        if(!conference) throw new Error('Conference not found')
-        if(user.props.id !== conference.props.organizerId) throw new Error('You are not allowed to update this conference')
+        if(!conference) throw new ConferenceNotFoundException()
+        if(user.props.id !== conference.props.organizerId) throw new ConferenceUpdateForbiddenException()
 
         conference.update({seats})
 
