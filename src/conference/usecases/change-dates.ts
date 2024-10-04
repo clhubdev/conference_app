@@ -51,7 +51,7 @@ export class ChangeDates implements Executable<RequestChangeDates, ResponseChang
     }
 
     async sendEmailToParticipants(conference: Conference): Promise<void> {
-        const bookings = await this.bookingRepository.findById(conference.props.id)
+        const bookings = await this.bookingRepository.findByConferenceId(conference.props.id)
         const users = await Promise.all(
             bookings
                 .map(booking => this.userRepository.findById(booking.props.userId))

@@ -38,7 +38,7 @@ describe('Feature: Make a booking', () => {
         const fetchedBooking = await bookingRepository.findById(result.body.data.id)
 
         expect(fetchedBooking).toBeDefined
-        
+
         expect(fetchedBooking[0]?.props).toEqual({
             id: result.body.data.id,
             userId: e2eUsers.johnDoe.entity.props.id,
